@@ -1,0 +1,57 @@
+0.06     2013-03-02
+
+- Renamed Type to Specio.
+
+
+0.05     2012-10-14
+
+- This module didn't really need XS. It turns out that 5.10 added
+  re::is_regexp() so we can use that instead. Thanks to Jesse Luehrs for
+  pointing this out.
+
+
+0.04     2012-09-30
+
+- Added any_does_type and object_does_type declaration helpers. These check
+  whether a class and/or object does a given role. They work with Moose,
+  Mouse, and Role::Tiny.
+
+- Fixed implementation of any_isa_type and object_isa_type to match docs. If
+  given more than one argument, the docs said they expected named parameters
+  but internally the code expected positional parameters.
+
+
+0.03     2012-09-30
+
+- Various hacks to make Specio::Constraint objects play nice with Moose. Needs
+  changes to Moose to work properly, however.
+
+- The message generator sub is no longer called as a method. It is called as a
+  sub so it doesn't receive the type as an argument.
+
+- The inline environment variable names used for each type are now
+  unique. This means that types will not step on each other if you want to
+  inline more than one type check in the same scope.
+
+- Non-inlined type coercions were completely broken.
+
+- Added $type->is_same_type_as and $type->is_a_type_of methods.
+
+- The Maybe type was a subtype of Ref in the code, which is wrong. It is now a
+  subtype of Item.
+
+- This module now explicitly requires Perl 5.10.
+
+
+0.02     2012-05-14
+
+- Now with lots more documentation, but this is still very alpha. Feedback
+  from potential users is welcome.
+
+
+0.01     2012-05-13
+
+- First release upon an unsuspecting world. This is very alpha and subject to
+  change. I'm mostly releasing it to get some feedback on the design. Do not
+  use this in your code yet, unless you promise not to complain about the lack
+  of docs or the fact that the next release breaks your code.
