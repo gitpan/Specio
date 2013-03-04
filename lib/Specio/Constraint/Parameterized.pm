@@ -1,6 +1,6 @@
 package Specio::Constraint::Parameterized;
 {
-  $Specio::Constraint::Parameterized::VERSION = '0.06';
+  $Specio::Constraint::Parameterized::VERSION = '0.07';
 }
 
 use strict;
@@ -54,7 +54,7 @@ Specio::Constraint::Parameterized - A class which represents parameterized const
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 

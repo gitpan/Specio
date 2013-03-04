@@ -1,6 +1,6 @@
 package Specio::Helpers;
 {
-  $Specio::Helpers::VERSION = '0.06';
+  $Specio::Helpers::VERSION = '0.07';
 }
 
 use strict;
@@ -87,7 +87,7 @@ Specio::Helpers - Helper subs for the Specio distro
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 

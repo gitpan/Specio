@@ -44,6 +44,7 @@ globification
 inlinable
 inline
 isa
+namespace
 parameterizable
 parameterization
 parameterized

@@ -1,6 +1,6 @@
 package Specio::Exception;
 {
-  $Specio::Exception::VERSION = '0.06';
+  $Specio::Exception::VERSION = '0.07';
 }
 
 use strict;
@@ -40,7 +40,7 @@ Specio::Exception - A Throwable::Error subclass for type constraint failures
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 

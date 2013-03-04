@@ -1,6 +1,6 @@
 package Specio::Role::Inlinable;
 {
-  $Specio::Role::Inlinable::VERSION = '0.06';
+  $Specio::Role::Inlinable::VERSION = '0.07';
 }
 
 use strict;
@@ -98,7 +98,7 @@ Specio::Role::Inlinable - A role for things which can be inlined (type constrain
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 

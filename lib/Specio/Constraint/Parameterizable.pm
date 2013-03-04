@@ -1,6 +1,6 @@
 package Specio::Constraint::Parameterizable;
 {
-  $Specio::Constraint::Parameterizable::VERSION = '0.06';
+  $Specio::Constraint::Parameterizable::VERSION = '0.07';
 }
 
 use strict;
@@ -96,7 +96,7 @@ Specio::Constraint::Parameterizable - A class which represents parameterizable c
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 

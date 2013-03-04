@@ -1,6 +1,6 @@
 package Specio::Exporter;
 {
-  $Specio::Exporter::VERSION = '0.06';
+  $Specio::Exporter::VERSION = '0.07';
 }
 
 use strict;
@@ -42,7 +42,7 @@ Specio::Exporter - Base class for type libraries
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 

@@ -1,6 +1,6 @@
 package Specio::Constraint::Role::Interface;
 {
-  $Specio::Constraint::Role::Interface::VERSION = '0.06';
+  $Specio::Constraint::Role::Interface::VERSION = '0.07';
 }
 
 use strict;
@@ -436,7 +436,7 @@ Specio::Constraint::Role::Interface - The interface all type constraints should 
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 

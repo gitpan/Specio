@@ -1,6 +1,6 @@
 package Specio::Constraint::Role::CanType;
 {
-  $Specio::Constraint::Role::CanType::VERSION = '0.06';
+  $Specio::Constraint::Role::CanType::VERSION = '0.07';
 }
 
 use strict;
@@ -75,7 +75,7 @@ Specio::Constraint::Role::CanType - Provides a common implementation for Specio:
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 DESCRIPTION
 

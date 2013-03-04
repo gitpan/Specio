@@ -1,6 +1,6 @@
 package Specio;
 {
-  $Specio::VERSION = '0.06';
+  $Specio::VERSION = '0.07';
 }
 
 use strict;
@@ -22,7 +22,7 @@ Specio - Type constraints and coercions for Perl
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 
@@ -350,6 +350,13 @@ Moose has some bizarre (and mostly) undocumented features relating to
 coercions and parameterizable types. This is a misfeature.
 
 =back
+
+=head1 WHY THE NAME?
+
+This distro was originally called "Type", but that's an awfully generic top
+level namespace. Specio is Latin for for "look at" and "spec" is the root for
+the word "species". It's short, relatively easy to type, and not used by any
+other distro.
 
 =head1 LONG-TERM PLANS
 
