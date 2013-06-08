@@ -1,6 +1,6 @@
 package Specio::Constraint::AnyCan;
 {
-  $Specio::Constraint::AnyCan::VERSION = '0.07';
+  $Specio::Constraint::AnyCan::VERSION = '0.08';
 }
 
 use strict;
@@ -58,7 +58,7 @@ Specio::Constraint::AnyCan - A class for constraints which require a class name 
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 

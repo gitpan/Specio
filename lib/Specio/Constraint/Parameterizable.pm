@@ -1,6 +1,6 @@
 package Specio::Constraint::Parameterizable;
 {
-  $Specio::Constraint::Parameterizable::VERSION = '0.07';
+  $Specio::Constraint::Parameterizable::VERSION = '0.08';
 }
 
 use strict;
@@ -58,7 +58,7 @@ sub parameterize {
         },
     );
 
-    # This isn't a default so as to avoid generating it even when they
+    # This isn't a default so as to avoid generating it even when the
     # parameter is already set.
     $declared_at //= Specio::DeclaredAt->new_from_caller(1);
 
@@ -96,7 +96,7 @@ Specio::Constraint::Parameterizable - A class which represents parameterizable c
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 

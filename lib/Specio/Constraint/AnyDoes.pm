@@ -1,6 +1,6 @@
 package Specio::Constraint::AnyDoes;
 {
-  $Specio::Constraint::AnyDoes::VERSION = '0.07';
+  $Specio::Constraint::AnyDoes::VERSION = '0.08';
 }
 
 use strict;
@@ -59,7 +59,7 @@ Specio::Constraint::AnyDoes - A class for constraints which require a class name
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 

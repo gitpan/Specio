@@ -1,6 +1,6 @@
 package Specio::Constraint::Simple;
 {
-  $Specio::Constraint::Simple::VERSION = '0.07';
+  $Specio::Constraint::Simple::VERSION = '0.08';
 }
 
 use strict;
@@ -27,7 +27,7 @@ Specio::Constraint::Simple - Class for simple (non-parameterized or specialized)
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 

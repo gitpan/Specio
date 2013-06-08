@@ -1,6 +1,6 @@
 package Specio::Constraint::Role::Interface;
 {
-  $Specio::Constraint::Role::Interface::VERSION = '0.07';
+  $Specio::Constraint::Role::Interface::VERSION = '0.08';
 }
 
 use strict;
@@ -294,8 +294,6 @@ sub can_inline_coercion_and_check {
         die 'Cannot inline coercion and check'
             unless $self->can_inline_coercion_and_check();
 
-        my $unique_id = sprintf( '%016d', $counter++ );
-
         my $type_var_name = '$_Specio_Constraint_Interface_type' . $counter;
         my $message_generator_var_name
             = '$_Specio_Constraint_Interface_message_generator' . $counter;
@@ -325,6 +323,8 @@ sub can_inline_coercion_and_check {
                 . ' value   => $value );';
         #>>>
         $source .= '$value };';
+
+        $counter++;
 
         return ( $source, \%env );
     }
@@ -436,7 +436,7 @@ Specio::Constraint::Role::Interface - The interface all type constraints should 
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 DESCRIPTION
 

@@ -1,6 +1,6 @@
 package Specio::Constraint::Role::IsaType;
 {
-  $Specio::Constraint::Role::IsaType::VERSION = '0.07';
+  $Specio::Constraint::Role::IsaType::VERSION = '0.08';
 }
 
 use strict;
@@ -53,7 +53,7 @@ Specio::Constraint::Role::IsaType - Provides a common implementation for Specio:
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 DESCRIPTION
 

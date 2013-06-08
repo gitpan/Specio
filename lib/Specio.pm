@@ -1,6 +1,6 @@
 package Specio;
 {
-  $Specio::VERSION = '0.07';
+  $Specio::VERSION = '0.08';
 }
 
 use strict;
@@ -22,7 +22,7 @@ Specio - Type constraints and coercions for Perl
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 
