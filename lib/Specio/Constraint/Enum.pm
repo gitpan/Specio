@@ -1,48 +1,56 @@
 package Specio::Constraint::Enum;
-{
-  $Specio::Constraint::Enum::VERSION = '0.08';
-}
-
+$Specio::Constraint::Enum::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use B ();
+use Role::Tiny::With;
 use Specio::Library::Builtins;
+use Specio::OO qw( new _accessorize );
+use Storable qw( dclone );
 
-use Moose;
-
+use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
-my $Str = t('Str');
-has '+parent' => (
-    init_arg => undef,
-    default  => sub { $Str },
-);
+{
+    my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
 
-has values => (
-    is       => 'ro',
-    isa      => 'ArrayRef[Str]',
-    required => 1,
-);
+    for my $name (qw( parent _inline_generator )) {
+        $attrs->{$name}{init_arg} = undef;
+        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
+    }
 
-my $_inline_generator = sub {
-    my $self = shift;
-    my $val  = shift;
+    $attrs->{values} = {
+        isa      => 'ArrayRef',
+        required => 1,
+    };
 
-    return
-          'defined('
-        . $val . ') '
-        . '&& !ref('
-        . $val . ') '
-        . '&& $_Specio_Constraint_Enum_enum_values{'
-        . $val . '}';
-};
+    sub _attrs {
+        return $attrs;
+    }
+}
 
-has '+_inline_generator' => (
-    init_arg => undef,
-    default  => sub { $_inline_generator },
-);
+{
+    my $Str = t('Str');
+    sub _build_parent { $Str }
+}
+
+{
+    my $_inline_generator = sub {
+        my $self = shift;
+        my $val  = shift;
+
+        return
+              'defined('
+            . $val . ') '
+            . '&& !ref('
+            . $val . ') '
+            . '&& $_Specio_Constraint_Enum_enum_values{'
+            . $val . '}';
+    };
+
+    sub _build_inline_generator { $_inline_generator }
+}
 
 sub _build_inline_environment {
     my $self = shift;
@@ -52,7 +60,7 @@ sub _build_inline_environment {
     return { '%_Specio_Constraint_Enum_enum_values' => \%values };
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -68,7 +76,7 @@ Specio::Constraint::Enum - A class for constraints which require a string matchi
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -111,7 +119,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

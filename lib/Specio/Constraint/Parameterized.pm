@@ -1,28 +1,30 @@
 package Specio::Constraint::Parameterized;
-{
-  $Specio::Constraint::Parameterized::VERSION = '0.08';
-}
-
+$Specio::Constraint::Parameterized::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
-use Specio::Constraint::Parameterized;
+use Role::Tiny::With;
+use Specio::OO qw( new _accessorize );
+use Storable qw( dclone );
 
-use Moose;
-
+use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
-has '+parent' => (
-    isa      => 'Specio::Constraint::Parameterizable',
-    required => 1,
-);
+{
+    my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
 
-has parameter => (
-    is       => 'ro',
-    does     => 'Specio::Constraint::Role::Interface',
-    required => 1,
-);
+    $attrs->{parent}{isa}      = 'Specio::Constraint::Parameterizable';
+    $attrs->{parent}{required} = 1;
+
+    $attrs->{parameter} = {
+        does     => 'Specio::Constraint::Role::Interface',
+        required => 1,
+    };
+
+    sub _attrs {
+        return $attrs;
+    }
+}
 
 sub can_be_inlined {
     my $self = shift;
@@ -38,7 +40,7 @@ sub type_parameter {
     shift->parameter();
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -54,7 +56,7 @@ Specio::Constraint::Parameterized - A class which represents parameterized const
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -68,6 +70,8 @@ version 0.08
 =head1 DESCRIPTION
 
 This class implements the API for parameterized types.
+
+=for Pod::Coverage can_be_inlined type_parameter
 
 =head1 API
 
@@ -106,7 +110,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

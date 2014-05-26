@@ -1,65 +1,54 @@
 package Specio::Role::Inlinable;
-{
-  $Specio::Role::Inlinable::VERSION = '0.08';
-}
-
+$Specio::Role::Inlinable::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use Eval::Closure qw( eval_closure );
 
-use Moose::Role;
+use Role::Tiny;
 
 requires '_build_description';
 
-has _inline_generator => (
-    is        => 'ro',
-    isa       => 'CodeRef',
-    predicate => '_has_inline_generator',
-    init_arg  => 'inline_generator',
-);
+{
+    my $attrs = {
+        _inline_generator => {
+            is        => 'ro',
+            isa       => 'CodeRef',
+            predicate => '_has_inline_generator',
+            init_arg  => 'inline_generator',
+        },
+        _inline_environment => {
+            is       => 'ro',
+            isa      => 'HashRef',
+            lazy     => 1,
+            init_arg => 'inline_environment',
+            builder  => '_build_inline_environment',
+        },
+        _generated_inline_sub => {
+            is       => 'ro',
+            isa      => 'CodeRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_generated_inline_sub',
+        },
+        declared_at => {
+            is       => 'ro',
+            isa      => 'Specio::DeclaredAt',
+            required => 1,
+        },
+        _description => {
+            is       => 'ro',
+            isa      => 'Str',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_description',
+        },
+    };
 
-has _inline_environment => (
-    is       => 'ro',
-    isa      => 'HashRef[Any]',
-    lazy     => 1,
-    init_arg => 'inline_environment',
-    builder  => '_build_inline_environment',
-);
-
-has _generated_inline_sub => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_generated_inline_sub',
-);
-
-has declared_at => (
-    is       => 'ro',
-    isa      => 'Specio::DeclaredAt',
-    required => 1,
-);
-
-has _description => (
-    is       => 'ro',
-    isa      => 'Str',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_description',
-);
-
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-
-    my $p = $class->$orig(@_);
-
-    $p->{inline_generator} = delete $p->{inline} if exists $p->{inline};
-
-    return $p;
-};
+    sub _attrs {
+        return $attrs;
+    }
+}
 
 sub can_be_inlined {
     my $self = shift;
@@ -98,12 +87,14 @@ Specio::Role::Inlinable - A role for things which can be inlined (type constrain
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 
 This role implements a common API for inlinable things, type constraints and
 coercions. It is fully documented in the relevant classes.
+
+=for Pod::Coverage .*
 
 =head1 AUTHOR
 
@@ -111,7 +102,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

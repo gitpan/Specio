@@ -1,8 +1,5 @@
 package Specio::Registry;
-{
-  $Specio::Registry::VERSION = '0.08';
-}
-
+$Specio::Registry::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
@@ -66,11 +63,13 @@ Specio::Registry - Implements the per-package type registry
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 
 There's nothing public here.
+
+=for Pod::Coverage .*
 
 =head1 AUTHOR
 
@@ -78,7 +77,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

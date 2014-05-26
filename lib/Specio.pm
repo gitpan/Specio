@@ -1,8 +1,5 @@
 package Specio;
-{
-  $Specio::VERSION = '0.08';
-}
-
+$Specio::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
@@ -22,7 +19,7 @@ Specio - Type constraints and coercions for Perl
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -84,7 +81,8 @@ Instead, you can explicitly check a value against a type, and optionally
 coerce values to that type.
 
 My long-term goal is to replace Moose's built-in types and L<MooseX::Types>
-with this module.
+with this module. I will also make sure that Specio types can be used with Moo
+in a sane fashion.
 
 =head1 WHAT IS A TYPE?
 
@@ -397,7 +395,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

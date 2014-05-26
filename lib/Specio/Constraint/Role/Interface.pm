@@ -1,101 +1,87 @@
 package Specio::Constraint::Role::Interface;
-{
-  $Specio::Constraint::Role::Interface::VERSION = '0.08';
-}
-
+$Specio::Constraint::Role::Interface::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
+use Carp qw( confess );
 use Devel::PartialDump;
-use List::AllUtils qw( all any );
-use Sub::Name qw( subname );
-use Try::Tiny;
+use List::MoreUtils qw( all any );
 use Specio::Exception;
+use Specio::TypeChecks qw( is_CodeRef );
+use Try::Tiny;
 
-use Moose::Role;
-use MooseX::SemiAffordanceAccessor;
+use Role::Tiny;
 
-with 'MooseX::Clone', 'Specio::Role::Inlinable';
-
-has name => (
-    is        => 'ro',
-    isa       => 'Str',
-    predicate => '_has_name',
-);
-
-has parent => (
-    is        => 'ro',
-    does      => 'Specio::Constraint::Role::Interface',
-    predicate => '_has_parent',
-);
-
-has _constraint => (
-    is        => 'rw',
-    writer    => '_set_constraint',
-    isa       => 'CodeRef',
-    predicate => '_has_constraint',
-    init_arg  => 'constraint',
-);
-
-has _optimized_constraint => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_optimized_constraint',
-);
-
-has _ancestors => (
-    is       => 'ro',
-    isa      => 'ArrayRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_ancestors',
-);
-
-has _message_generator => (
-    is       => 'rw',
-    isa      => 'CodeRef',
-    init_arg => undef,
-);
-
-has _coercions => (
-    traits  => [ 'Clone', 'Hash' ],
-    handles => {
-        coercions               => 'values',
-        coercion_from_type      => 'get',
-        _has_coercion_from_type => 'exists',
-        _add_coercion           => 'set',
-        has_coercions           => 'count',
-    },
-    default => sub { {} },
-);
-
-# Because types are cloned on import, we can't directly compare type
-# objects. Because type names can be reused between packages (no global
-# registry) we can't compare types based on name either.
-has _signature => (
-    is       => 'ro',
-    isa      => 'Str',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_signature',
-);
+use Specio::Role::Inlinable;
+with 'Specio::Role::Inlinable';
 
 my $NullConstraint = sub { 1 };
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
+{
+    my $role_attrs = Specio::Role::Inlinable::_attrs();
 
-    my $p = $class->$orig(@_);
+    my $attrs = {
+        %{$role_attrs},
+        name => {
+            is        => 'bare',
+            isa       => 'Str',
+            predicate => '_has_name',
+        },
+        parent => {
+            is        => 'bare',
+            does      => 'Specio::Constraint::Role::Interface',
+            predicate => '_has_parent',
+        },
+        _constraint => {
+            is        => 'bare',
+            isa       => 'CodeRef',
+            init_arg  => 'constraint',
+            predicate => '_has_constraint',
+        },
+        _optimized_constraint => {
+            is       => 'bare',
+            isa      => 'CodeRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_optimized_constraint',
+        },
+        _ancestors => {
+            is       => 'bare',
+            isa      => 'ArrayRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_ancestors',
+        },
+        _message_generator => {
+            is       => 'bare',
+            isa      => 'CodeRef',
+            init_arg => undef,
+        },
+        _coercions => {
+            is      => 'bare',
+            builder => '_build_coercions',
+        },
 
-    $p->{constraint}        = delete $p->{where}   if exists $p->{where};
-    $p->{message_generator} = delete $p->{message} if exists $p->{message};
+        # Because types are cloned on import, we can't directly compare type
+        # objects. Because type names can be reused between packages (no global
+        # registry) we can't compare types based on name either.
+        _signature => {
+            is       => 'bare',
+            isa      => 'Str',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_signature',
+        },
+    };
 
-    return $p;
-};
+    sub _attrs {
+        return $attrs;
+    }
+}
+
+sub clone {
+    $_[0]->Specio::OO::clone();
+}
 
 sub BUILD { }
 
@@ -112,11 +98,18 @@ around BUILD => sub {
         'A type constraint should have either a constraint or inline_generator parameter, not both'
         if $self->_has_constraint() && $self->_has_inline_generator();
 
-    $self->_set_message_generator(
-        $self->_wrap_message_generator( $p->{message_generator} ) );
+    $self->{_message_generator}
+        = $self->_wrap_message_generator( $p->{message_generator} );
 
     return;
 };
+
+sub _set_constraint {
+    is_CodeRef( $_[1] )
+        or confess '_set_constraint() must be given a coderef, not a '
+        . Devel::PartialDump->new()->dump( $_[1] );
+    $_[0]->{_constraint} = $_[1];
+}
 
 sub _wrap_message_generator {
     my $self      = shift;
@@ -134,6 +127,12 @@ sub _wrap_message_generator {
 
     return sub { $generator->( $d, @_ ) };
 }
+
+sub coercions               { values %{ $_[0]->{coercions} } }
+sub coercion_from_type      { $_[0]->{coercions}{ $_[1] } }
+sub _has_coercion_from_type { exists $_[0]->{coercions}{ $_[1] } }
+sub _add_coercion           { $_[0]->{coercions}{ $_[1] } = $_[2] }
+sub has_coercions           { scalar keys %{ $_[0]->{coercions} } }
 
 sub validate_or_die {
     my $self  = shift;
@@ -229,11 +228,9 @@ sub _constraint_with_parents {
 
     return $NullConstraint unless @constraints;
 
-    return subname(
-        'optimized constraint for ' . $self->_description() => sub {
-            all { $_->( $_[0] ) } @constraints;
-        }
-    );
+    return sub {
+        all { $_->( $_[0] ) } @constraints;
+    };
 }
 
 # This is only used for identifying from types as part of coercions, but I
@@ -330,6 +327,11 @@ sub can_inline_coercion_and_check {
     }
 }
 
+sub _ancestors {
+    return $_[0]->{_ancestors}
+        ||= $_[0]->_build_ancestors();
+}
+
 sub _build_ancestors {
     my $self = shift;
 
@@ -354,6 +356,8 @@ sub _build_description {
 
     return $desc;
 }
+
+sub _build_coercions { {} }
 
 sub _build_signature {
     my $self = shift;
@@ -392,7 +396,7 @@ sub _compiled_type_coercion {
 
     return sub {
         return $self->coerce_value(shift);
-        }
+    };
 }
 
 sub inline_environment {
@@ -436,7 +440,7 @@ Specio::Constraint::Role::Interface - The interface all type constraints should 
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 
@@ -444,6 +448,8 @@ This role defines the interface that all type constraints must provide, and
 provides most (or all) of the implementation. The L<Specio::Constraint::Simple>
 class simply consumes this role and provides no additional code. Other
 constraint classes add features or override some of this role's functionality.
+
+=for Pod::Coverage .*
 
 =head1 API
 
@@ -453,7 +459,7 @@ or expanded upon.
 
 =head1 ROLES
 
-This role does the L<Specio::Role::Inlinable> and L<MooseX::Clone> roles.
+This role does the L<Specio::Role::Inlinable> role.
 
 =head1 AUTHOR
 
@@ -461,7 +467,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

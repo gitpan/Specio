@@ -1,33 +1,37 @@
 package Specio::Constraint::Parameterizable;
-{
-  $Specio::Constraint::Parameterizable::VERSION = '0.08';
-}
-
+$Specio::Constraint::Parameterizable::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
-use MooseX::Params::Validate qw( validated_list );
+use Role::Tiny::With;
 use Specio::Constraint::Parameterized;
 use Specio::DeclaredAt;
+use Specio::OO qw( new _accessorize );
 
-use Moose;
-
+use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
-has _parameterized_constraint_generator => (
-    is        => 'ro',
-    isa       => 'CodeRef',
-    init_arg  => 'parameterized_constraint_generator',
-    predicate => '_has_parameterized_constraint_generator',
-);
+{
+    my $role_attrs = Specio::Constraint::Role::Interface::_attrs();
 
-has _parameterized_inline_generator => (
-    is        => 'ro',
-    isa       => 'CodeRef',
-    init_arg  => 'parameterized_inline_generator',
-    predicate => '_has_parameterized_inline_generator',
-);
+    my $attrs = {
+        %{$role_attrs},
+        _parameterized_constraint_generator => {
+            isa       => 'CodeRef',
+            init_arg  => 'parameterized_constraint_generator',
+            predicate => '_has_parameterized_constraint_generator',
+        },
+        _parameterized_inline_generator => {
+            isa       => 'CodeRef',
+            init_arg  => 'parameterized_inline_generator',
+            predicate => '_has_parameterized_inline_generator',
+        },
+    };
+
+    sub _attrs {
+        return $attrs;
+    }
+}
 
 sub BUILD {
     my $self = shift;
@@ -49,14 +53,18 @@ sub BUILD {
 
 sub parameterize {
     my $self = shift;
-    my ( $parameter, $declared_at ) = validated_list(
-        \@_,
-        of          => { does => 'Specio::Constraint::Role::Interface' },
-        declared_at => {
-            isa      => 'Specio::DeclaredAt',
-            optional => 1,
-        },
-    );
+    my %args = @_;
+
+    my ( $parameter, $declared_at ) = @args{qw( of declared_at)};
+
+    # my ( $parameter, $declared_at ) = validated_list(
+    #     \@_,
+    #     of          => { does => 'Specio::Constraint::Role::Interface' },
+    #     declared_at => {
+    #         isa      => 'Specio::DeclaredAt',
+    #         optional => 1,
+    #     },
+    # );
 
     # This isn't a default so as to avoid generating it even when the
     # parameter is already set.
@@ -80,7 +88,7 @@ sub parameterize {
     return Specio::Constraint::Parameterized->new(%p);
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -96,7 +104,7 @@ Specio::Constraint::Parameterizable - A class which represents parameterizable c
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -108,6 +116,8 @@ version 0.08
 
 This class implements the API for parameterizable types like C<ArrayRef> and
 C<Maybe>.
+
+=for Pod::Coverage BUILD
 
 =head1 API
 
@@ -165,7 +175,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

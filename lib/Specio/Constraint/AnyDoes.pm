@@ -1,49 +1,43 @@
 package Specio::Constraint::AnyDoes;
-{
-  $Specio::Constraint::AnyDoes::VERSION = '0.08';
-}
-
+$Specio::Constraint::AnyDoes::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
-use B                  ();
-use Devel::PartialDump ();
-use Scalar::Util       ();
+use B ();
+use Role::Tiny::With;
+use Scalar::Util ();
 use Specio::Library::Builtins;
+use Specio::OO qw( new _accessorize );
 
-use Moose;
-
+use Specio::Constraint::Role::DoesType;
 with 'Specio::Constraint::Role::DoesType';
 
-my $Defined = t('Defined');
-has '+parent' => (
-    init_arg => undef,
-    default  => sub { $Defined },
-);
+{
+    my $Defined = t('Defined');
+    sub _build_parent { $Defined }
+}
 
-my $_inline_generator = sub {
-    my $self = shift;
-    my $val  = shift;
+{
+    my $_inline_generator = sub {
+        my $self = shift;
+        my $val  = shift;
 
-    return
-          '( Scalar::Util::blessed('
-        . $val
-        . ') || ( '
-        . " defined $val && ! ref $val ) ) && "
-        . $val
-        . q{->can('does')} . '&&'
-        . $val
-        . '->does('
-        . B::perlstring( $self->role ) . ')';
-};
+        return
+              '( Scalar::Util::blessed('
+            . $val
+            . ') || ( '
+            . " defined $val && ! ref $val ) ) && "
+            . $val
+            . q{->can('does')} . '&&'
+            . $val
+            . '->does('
+            . B::perlstring( $self->role ) . ')';
+    };
 
-has '+_inline_generator' => (
-    init_arg => undef,
-    default  => sub { $_inline_generator },
-);
+    sub _build_inline_generator { $_inline_generator }
+}
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -59,7 +53,7 @@ Specio::Constraint::AnyDoes - A class for constraints which require a class name
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -105,7 +99,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

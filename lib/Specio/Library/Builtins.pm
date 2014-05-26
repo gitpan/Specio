@@ -1,8 +1,5 @@
 package Specio::Library::Builtins;
-{
-  $Specio::Library::Builtins::VERSION = '0.08';
-}
-
+$Specio::Library::Builtins::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
@@ -386,7 +383,7 @@ Specio::Library::Builtins - Implements type constraint objects for Perl's built-
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 
@@ -401,7 +398,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

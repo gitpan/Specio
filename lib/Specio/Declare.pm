@@ -1,8 +1,5 @@
 package Specio::Declare;
-{
-  $Specio::Declare::VERSION = '0.08';
-}
-
+$Specio::Declare::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
@@ -194,6 +191,10 @@ sub _make_tc {
 
     my $class = delete $p{type_class} || 'Specio::Constraint::Simple';
 
+    $p{constraint}        = delete $p{where}   if exists $p{where};
+    $p{message_generator} = delete $p{message} if exists $p{message};
+    $p{inline_generator}  = delete $p{inline}  if exists $p{inline};
+
     return $class->new(
         %p,
         declared_at => Specio::DeclaredAt->new_from_caller(2),
@@ -202,11 +203,15 @@ sub _make_tc {
 
 sub coerce {
     my $to = shift;
+    my %p = @_;
+
+    $p{coercion}         = delete $p{using}  if exists $p{using};
+    $p{inline_generator} = delete $p{inline} if exists $p{inline};
 
     return $to->add_coercion(
         Specio::Coercion->new(
             to => $to,
-            @_,
+            %p,
             declared_at => Specio::DeclaredAt->new_from_caller(1),
         )
     );
@@ -226,7 +231,7 @@ Specio::Declare - Specio declaration subroutines
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -513,7 +518,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

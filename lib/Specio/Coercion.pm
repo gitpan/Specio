@@ -1,53 +1,46 @@
 package Specio::Coercion;
-{
-  $Specio::Coercion::VERSION = '0.08';
-}
-
+$Specio::Coercion::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
-use Moose;
+use Specio::OO qw( new clone _accessorize );
 
-with 'MooseX::Clone', 'Specio::Role::Inlinable';
+use Role::Tiny::With;
 
-has from => (
-    is       => 'ro',
-    does     => 'Specio::Constraint::Role::Interface',
-    required => 1,
-);
+use Specio::Role::Inlinable;
+with 'Specio::Role::Inlinable';
 
-has to => (
-    is       => 'ro',
-    does     => 'Specio::Constraint::Role::Interface',
-    required => 1,
-    weak_ref => 1,
-);
+{
+    my $role_attrs = Specio::Role::Inlinable::_attrs();
 
-has _coercion => (
-    is        => 'ro',
-    isa       => 'CodeRef',
-    predicate => '_has_coercion',
-    init_arg  => 'coercion',
-);
+    my $attrs      = {
+        %{$role_attrs},
+        from => {
+            does     => 'Specio::Constraint::Role::Interface',
+            required => 1,
+        },
+        to => {
+            does     => 'Specio::Constraint::Role::Interface',
+            required => 1,
+            weak_ref => 1,
+        },
+        _coercion => {
+            isa       => 'CodeRef',
+            predicate => '_has_coercion',
+            init_arg  => 'coercion',
+        },
+        _optimized_coercion => {
+            isa      => 'CodeRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_optimized_coercion',
+        },
+    };
 
-has _optimized_coercion => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_optimized_coercion',
-);
-
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-
-    my $p = $class->$orig(@_);
-
-    $p->{coercion} = delete $p->{using} if exists $p->{using};
-
-    return $p;
-};
+    sub _attrs {
+        return $attrs;
+    }
+}
 
 sub BUILD {
     my $self = shift;
@@ -106,7 +99,7 @@ sub _build_description {
     return $desc;
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -122,7 +115,7 @@ Specio::Coercion - A class representing a coercion from one type to another
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -144,6 +137,8 @@ number to its nearest integer and return that integer.
 Coercions can be implemented either as a simple subroutine reference or as an
 inline generator subroutine. Using an inline generator is faster but more
 complicated.
+
+=for Pod::Coverage BUILD
 
 =head1 API
 
@@ -248,9 +243,13 @@ This returns true if the coercion has an inline generator I<and> the
 constraint it is from can be inlined. This exists primarily for the benefit of
 the C<inline_coercion_and_check()> method for type constraint object.
 
+=head2 $coercion->clone()
+
+Returns a clone of this object.
+
 =head1 ROLES
 
-This class does the L<Specio::Role::Inlinable> and L<MooseX::Clone> roles.
+This class does the L<Specio::Role::Inlinable> role.
 
 =head1 AUTHOR
 
@@ -258,7 +257,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

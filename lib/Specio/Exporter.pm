@@ -1,8 +1,5 @@
 package Specio::Exporter;
-{
-  $Specio::Exporter::VERSION = '0.08';
-}
-
+$Specio::Exporter::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
@@ -42,7 +39,7 @@ Specio::Exporter - Base class for type libraries
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -101,7 +98,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

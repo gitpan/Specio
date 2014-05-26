@@ -1,36 +1,34 @@
 package Specio::Constraint::Role::CanType;
-{
-  $Specio::Constraint::Role::CanType::VERSION = '0.08';
-}
-
+$Specio::Constraint::Role::CanType::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
 use Lingua::EN::Inflect qw( PL_N WORDLIST );
 use Scalar::Util qw( blessed );
+use Storable qw( dclone );
 
-use Moose::Role;
+use Role::Tiny;
 
-with 'Specio::Constraint::Role::Interface' =>
-    { -excludes => ['_wrap_message_generator'] };
+use Specio::Constraint::Role::Interface;
+with 'Specio::Constraint::Role::Interface';
 
-has methods => (
-    is       => 'ro',
-    isa      => 'ArrayRef[Str]',
-    required => 1,
-);
+{
+    my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
 
-override BUILDARGS => sub {
-    my $self = shift;
-
-    my $p = super();
-
-    if ( defined $p->{can} && !ref $p->{can} ) {
-        $p->{can} = [ $p->{can} ];
+    for my $name (qw( parent _inline_generator )) {
+        $attrs->{$name}{init_arg} = undef;
+        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
     }
 
-    return $p;
-};
+    $attrs->{methods} = {
+        isa      => 'ArrayRef',
+        required => 1,
+    };
+
+    sub _attrs {
+        return $attrs;
+    }
+}
 
 sub _wrap_message_generator {
     my $self      = shift;
@@ -75,7 +73,7 @@ Specio::Constraint::Role::CanType - Provides a common implementation for Specio:
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 
@@ -87,7 +85,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

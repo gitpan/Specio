@@ -1,30 +1,65 @@
 package Specio::Exception;
-{
-  $Specio::Exception::VERSION = '0.08';
-}
-
+$Specio::Exception::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
-use Moose;
+use overload
+    q{""}    => 'as_string',
+    fallback => 1;
 
-extends 'Throwable::Error';
+use Devel::StackTrace;
+use Scalar::Util qw( blessed );
+use Specio::OO qw( new _accessorize );
 
-has type => (
-    is       => 'ro',
-    does     => 'Specio::Constraint::Role::Interface',
-    required => 1,
-);
+{
+    my $attrs = {
+        message => {
+            isa      => 'Str',
+            required => 1,
+        },
+        type => {
+            does     => 'Specio::Constraint::Role::Interface',
+            required => 1,
+        },
+        value => {
+            required => 1,
+        },
+        stack_trace => {
+            init_arg => undef,
+        },
+    };
 
-has value => (
-    is       => 'ro',
-    required => 1,
-);
+    sub _attrs {
+        return $attrs;
+    }
+}
 
-# Throwable::Error does the StackTrace::Auto role, which has a modifier on
-# new() for some reason.
-__PACKAGE__->meta()->make_immutable( inline_constructor => 0 );
+sub BUILD {
+    my $self = shift;
+
+    $self->{stack_trace} = Devel::StackTrace->new();
+
+    return;
+}
+
+sub as_string {
+    my $self = shift;
+
+    my $str = $self->message();
+    $str .= "\n\n" . $self->stack_trace()->as_string();
+
+    return $str;
+}
+
+sub throw {
+    my $self = shift;
+
+    die $self if blessed $self;
+
+    die $self->new(@_);
+}
+
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -40,12 +75,13 @@ Specio::Exception - A Throwable::Error subclass for type constraint failures
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 DESCRIPTION
 
-This is a subclass of L<Throwable::Error> which adds a few additional
-attributes specific to type constraint failures.
+This exception class is thrown by Specio when a type check fails. It emulates
+the L<Throwable::Error> API, but doesn't use that module to avoid adding a
+dependency on L<Moo>.
 
 =head1 DESCRIPTION
 
@@ -62,11 +98,35 @@ attributes specific to type constraint failures.
       }
   };
 
+=for Pod::Coverage BUILD throw
+
 =head1 API
 
-The two attributes it adds are C<type> and C<value>, both of which are
-required. The C<type> must be a L<Specio::Constraint::Role::Interface> object,
-and the C<value> can be anything (including C<undef>).
+This class provides the following methods:
+
+=head2 $exception->message()
+
+The error message associated with the exception.
+
+=head2 $exception->stack_trace()
+
+A L<Devel::StackTrace> object for the exception.
+
+=head2 $exception->type()
+
+The type constraint object against which the value failed.
+
+=head2 $exception->value()
+
+The value that failed the type check.
+
+=head2 $exception->as_string()
+
+The exception as a string. This includes the method and the stack trace.
+
+=head1 OVERLOADING
+
+This class overloads stringification to call the C<as_string()> method.
 
 =head1 AUTHOR
 
@@ -74,7 +134,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

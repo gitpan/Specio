@@ -1,36 +1,38 @@
 package Specio::DeclaredAt;
-{
-  $Specio::DeclaredAt::VERSION = '0.08';
-}
-
+$Specio::DeclaredAt::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
 
-use Moose;
+use Specio::OO qw( new clone _accessorize );
 
-has package => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
+{
+    my $attrs = {
+        package => {
+            is       => 'bare',
+            isa      => 'Str',
+            required => 1,
+        },
+        filename => {
+            is       => 'bare',
+            isa      => 'Str',
+            required => 1,
+        },
+        line => {
+            is       => 'bare',
+            isa      => 'Int',
+            required => 1,
+        },
+        subroutine => {
+            is        => 'bare',
+            isa       => 'Str',
+            predicate => 'has_subroutine',
+        },
+    };
 
-has filename => (
-    is       => 'ro',
-    isa      => 'Str',
-    required => 1,
-);
-
-has line => (
-    is       => 'ro',
-    isa      => 'Int',
-    required => 1,
-);
-
-has subroutine => (
-    is        => 'ro',
-    isa       => 'Str',
-    predicate => 'has_subroutine',
-);
+    sub _attrs {
+        return $attrs;
+    }
+}
 
 sub new_from_caller {
     my $class = shift;
@@ -60,7 +62,7 @@ sub description {
     return $desc;
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -76,7 +78,7 @@ Specio::DeclaredAt - A class to represent where a type or coercion was declared
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -123,7 +125,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 

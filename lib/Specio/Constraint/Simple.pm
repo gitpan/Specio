@@ -1,17 +1,14 @@
 package Specio::Constraint::Simple;
-{
-  $Specio::Constraint::Simple::VERSION = '0.08';
-}
-
+$Specio::Constraint::Simple::VERSION = '0.09'; # TRIAL
 use strict;
 use warnings;
-use namespace::autoclean;
 
-use Moose;
+use Role::Tiny::With;
+use Specio::OO qw( clone new _accessorize );
 
 with 'Specio::Constraint::Role::Interface';
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 
@@ -27,7 +24,7 @@ Specio::Constraint::Simple - Class for simple (non-parameterized or specialized)
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 
@@ -267,7 +264,7 @@ Dave Rolsky <autarch@urth.org>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2013 by Dave Rolsky.
+This software is Copyright (c) 2014 by Dave Rolsky.
 
 This is free software, licensed under:
 
