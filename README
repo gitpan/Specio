@@ -2,50 +2,52 @@ NAME
     Specio - Type constraints and coercions for Perl
 
 VERSION
-    version 0.09
+    version 0.10
 
 SYNOPSIS
-      package MyApp::Type::Library;
+        package MyApp::Type::Library;
 
-      use Specio::Declare;
-      use Specio::Library::Builtins;
+        use Specio::Declare;
+        use Specio::Library::Builtins;
 
-      declare(
-          'PositiveInt',
-          parent => t('Int'),
-          inline => sub {
-              $_[0]->parent()->inline_check( $_[1] ) . ' && ( ' . $_[1] . ' > 0';
-          },
-      );
+        declare(
+            'PositiveInt',
+            parent => t('Int'),
+            inline => sub {
+                $_[0]->parent()->inline_check( $_[1] )
+                    . ' && ( '
+                    . $_[1] . ' > 0';
+            },
+        );
 
-      # or ...
+        # or ...
 
-      declare(
-          'PositiveInt',
-          parent => t('Int'),
-          where  => sub { $_[0] > 0 },
-      );
+        declare(
+            'PositiveInt',
+            parent => t('Int'),
+            where  => sub { $_[0] > 0 },
+        );
 
-      declare(
-          'ArrayRefOfPositiveInt',
-          parent => t(
-              'ArrayRef',
-              of => t('PositiveInt'),
-          ),
-      );
+        declare(
+            'ArrayRefOfPositiveInt',
+            parent => t(
+                'ArrayRef',
+                of => t('PositiveInt'),
+            ),
+        );
 
-      coerce(
-          'ArrayRefOfPositiveInt',
-          from  => t('PositiveInt'),
-          using => sub { [ $_[0] ] },
-      );
+        coerce(
+            'ArrayRefOfPositiveInt',
+            from  => t('PositiveInt'),
+            using => sub { [ $_[0] ] },
+        );
 
-      any_can_type(
-          'Duck',
-          methods => [ 'duck_walk', 'quack' ],
-      );
+        any_can_type(
+            'Duck',
+            methods => [ 'duck_walk', 'quack' ],
+        );
 
-      object_isa_type('MyApp::Person');
+        object_isa_type('MyApp::Person');
 
 DESCRIPTION
     WARNING: This thing is very alpha.
@@ -192,9 +194,9 @@ PARAMETERIZABLE TYPES
     parameterized, it accepts either an "undef" or the type of its
     parameter.
 
-    This is useful for optional attributes or parameters. However, whenever
-    possible, you're often better off making the parameter not required at
-    all. This usually makes for a simpler API.
+    This is useful for optional attributes or parameters. However, you're
+    probably better off making your code simply not pass the parameter at
+    all This usually makes for a simpler API.
 
 REGISTRIES AND IMPORTING
     Types are local to each package where they are used. When you "import"
@@ -262,6 +264,51 @@ DECLARING TYPES
     helpers for declaring types. See that module's documentation for more
     details on these helpers.
 
+USING SPECIO WITH Moose
+    This needs some changes in Moose core. Stay tuned.
+
+USING SPECIO WITH Moo
+    Using Specio with Moo is easy. You can pass Specio constraint objects as
+    "isa" parameters for attributes. For coercions, simply call
+    "$type->coercion_sub()".
+
+        package Foo;
+
+        use Specio::Declare;
+        use Specio::Library::Builtins;
+        use Moo;
+
+        my $str_type = t('Str');
+        has string => (
+           is  => 'ro',
+           isa => $str_type,
+        );
+
+        my $ucstr = declare(
+            'UCStr',
+            parent => t('Str'),
+            where  => sub { $_[0] =~ /^[A-Z]+$/ },
+        );
+
+        coerce(
+            $ucstr,
+            from  => t('Str'),
+            using => sub { return uc $_[0] },
+        );
+
+        has ucstr => (
+            is     => 'ro',
+            isa    => $ucstr,
+            coerce => $ucstr->coercion_sub(),
+        );
+
+    The subs returned by Specio use Sub::Quote internally and are suitable
+    for inlining.
+
+USING SPECIO WITH OTHER THINGS
+    See Specio::Constraint::Simple for the API that all constraint objects
+    share.
+
 Moose, MooseX::Types, and Specio
     This module aims to supplant both Moose's built-in type system (see
     Moose::Util::TypeConstraints aka MUTC) and MooseX::Types, which attempts
@@ -304,14 +351,14 @@ Moose, MooseX::Types, and Specio
         name or object.
 
         With Specio, the distinction between accepting an object versus
-        object or class is explicit. There are four declaration helpers,
-        "object_can_type", "object_isa_type", "any_can_type", and
-        "any_isa_type".
+        object or class is explicit. There are six declaration helpers,
+        "object_can_type", "object_does_type", "object_isa_type",
+        "any_can_type", "any_does_type", and "any_isa_type".
 
     *   Overloading support is baked in
 
-        Perl's overloading is broken as hell, but ignoring it makes Moose's
-        type system frustrating.
+        Perl's overloading is quite broken but ignoring it makes Moose's
+        type system frustrating to use in many cases.
 
     *   Types can either have a constraint or inline generator, not both
 
@@ -343,8 +390,6 @@ LONG-TERM PLANS
     system, which would also make MooseX::Types obsolete. This almost
     certainly means rewriting this distro to not use Moose itself (or any
     modules which use Moose, like Throwable).
-
-    For now, the current code is a proof of concept for the design.
 
 BUGS
     Please report any bugs or feature requests to "bug-type@rt.cpan.org", or

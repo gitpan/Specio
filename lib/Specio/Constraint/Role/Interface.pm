@@ -1,13 +1,15 @@
 package Specio::Constraint::Role::Interface;
-$Specio::Constraint::Role::Interface::VERSION = '0.09'; # TRIAL
+$Specio::Constraint::Role::Interface::VERSION = '0.10';
 use strict;
 use warnings;
 
 use Carp qw( confess );
+use Class::Method::Modifiers ();
 use Devel::PartialDump;
 use List::MoreUtils qw( all any );
 use Specio::Exception;
 use Specio::TypeChecks qw( is_CodeRef );
+use Sub::Quote qw( quote_sub );
 use Try::Tiny;
 
 use Role::Tiny;
@@ -15,7 +17,11 @@ use Role::Tiny;
 use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
-my $NullConstraint = sub { 1 };
+use overload(
+    q{""}  => sub { $_[0] },
+    '&{}'  => '_subify',
+    'bool' => sub { 1 },
+);
 
 {
     my $role_attrs = Specio::Role::Inlinable::_attrs();
@@ -79,9 +85,7 @@ my $NullConstraint = sub { 1 };
     }
 }
 
-sub clone {
-    $_[0]->Specio::OO::clone();
-}
+my $NullConstraint = sub { 1 };
 
 sub BUILD { }
 
@@ -311,14 +315,15 @@ sub can_inline_coercion_and_check {
             %env = ( %env, %{ $coercion->_inline_environment() } );
         }
 
-        #<<<
-        $source
-            .= $self->inline_check('$value')
-                . ' or Specio::Exception->throw( '
-                . ' message => ' . $message_generator_var_name . '->($value),'
-                . ' type    => ' . $type_var_name . ','
-                . ' value   => $value );';
-        #>>>
+        $source .= $self->inline_check('$value');
+        $source .= ' or ';
+        $source .= $self->_inline_throw_exception(
+            '$value',
+            $message_generator_var_name,
+            $type_var_name
+        );
+        $source .= ';';
+
         $source .= '$value };';
 
         $counter++;
@@ -327,9 +332,67 @@ sub can_inline_coercion_and_check {
     }
 }
 
-sub _ancestors {
-    return $_[0]->{_ancestors}
-        ||= $_[0]->_build_ancestors();
+sub _subify {
+    my $self = shift;
+
+    if ( $self->can_be_inlined() ) {
+        my $inline = $self->inline_check('$_[0]');
+        $inline .= ' or ';
+
+        my %env = (
+            '$message_generator' => \( $self->_message_generator() ),
+            '$type'              => \$self,
+        );
+
+        $inline .= $self->_inline_throw_exception(
+            '$_[0]',
+            '$message_generator',
+            '$type',
+        );
+
+        return quote_sub( $inline, \%env );
+    }
+    else {
+        return sub { $self->validate_or_die( $_[0] ) };
+    }
+}
+
+sub _inline_throw_exception {
+    my $self                       = shift;
+    my $value_var                  = shift;
+    my $message_generator_var_name = shift;
+    my $type_var_name              = shift;
+
+    #<<<
+    return 'Specio::Exception->throw( '
+        . ' message => ' . $message_generator_var_name . '->(' . $value_var . '),'
+        . ' type    => ' . $type_var_name . ','
+        . ' value   => ' . $value_var . ' )';
+    #>>>
+}
+
+# This exists for the benefit of Moo
+sub coercion_sub {
+    my $self = shift;
+
+    if ( all { $_->can_be_inlined() } $self->coercions() ) {
+        my $inline = q{};
+        my %env;
+
+        for my $coercion ( $self->coercions() ) {
+            $inline
+                .= '$_[0] = '
+                . $coercion->inline_coercion( '$_[0]' ) . ' if '
+                . $coercion->from()->inline_check(' $_[0]' ) . ';';
+
+            %env = ( %env, %{ $coercion->_inline_environment() } );
+        }
+
+        return quote_sub( $inline, \%env );
+    }
+    else {
+        return sub { $self->coerce_value(shift) };
+    }
 }
 
 sub _build_ancestors {
@@ -434,13 +497,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Constraint::Role::Interface - The interface all type constraints should provide
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

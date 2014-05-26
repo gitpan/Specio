@@ -1,5 +1,5 @@
 package Specio::Constraint::AnyDoes;
-$Specio::Constraint::AnyDoes::VERSION = '0.09'; # TRIAL
+$Specio::Constraint::AnyDoes::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -7,7 +7,7 @@ use B ();
 use Role::Tiny::With;
 use Scalar::Util ();
 use Specio::Library::Builtins;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 
 use Specio::Constraint::Role::DoesType;
 with 'Specio::Constraint::Role::DoesType';
@@ -37,7 +37,7 @@ with 'Specio::Constraint::Role::DoesType';
     sub _build_inline_generator { $_inline_generator }
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -47,18 +47,20 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Constraint::AnyDoes - A class for constraints which require a class name or an object that does a specific role
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  my $type = Specio::Constraint::AnyDoes->new(...);
-  print $type->role();
+    my $type = Specio::Constraint::AnyDoes->new(...);
+    print $type->role();
 
 =head1 DESCRIPTION
 

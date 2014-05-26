@@ -1,9 +1,9 @@
 package Specio::Coercion;
-$Specio::Coercion::VERSION = '0.09'; # TRIAL
+$Specio::Coercion::VERSION = '0.10';
 use strict;
 use warnings;
 
-use Specio::OO qw( new clone _accessorize );
+use Specio::OO;
 
 use Role::Tiny::With;
 
@@ -99,7 +99,7 @@ sub _build_description {
     return $desc;
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -109,23 +109,25 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Coercion - A class representing a coercion from one type to another
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  my $coercion = $type->coercion_from_type('Int');
+    my $coercion = $type->coercion_from_type('Int');
 
-  my $new_value = $coercion->coerce_value(42);
+    my $new_value = $coercion->coerce_value(42);
 
-  if ( $coercion->can_be_inlined() ) {
-      my $code = $coercion->inline_coercion('$_[0]');
-  }
+    if ( $coercion->can_be_inlined() ) {
+        my $code = $coercion->inline_coercion('$_[0]');
+    }
 
 =head1 DESCRIPTION
 

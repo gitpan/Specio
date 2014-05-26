@@ -1,5 +1,5 @@
 package Specio::Exporter;
-$Specio::Exporter::VERSION = '0.09'; # TRIAL
+$Specio::Exporter::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -33,29 +33,31 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Exporter - Base class for type libraries
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  package MyApp::Type::Library;
+    package MyApp::Type::Library;
 
-  use parent 'Specio::Exporter';
+    use parent 'Specio::Exporter';
 
-  use Specio::Declare;
+    use Specio::Declare;
 
-  declare( ... );
+    declare( ... );
 
-  # more types here
+    # more types here
 
-  package MyApp::Foo;
+    package MyApp::Foo;
 
-  use MyApp::Type::Library
+    use MyApp::Type::Library
 
 =head1 DESCRIPTION
 

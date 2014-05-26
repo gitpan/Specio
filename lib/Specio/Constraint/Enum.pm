@@ -1,12 +1,12 @@
 package Specio::Constraint::Enum;
-$Specio::Constraint::Enum::VERSION = '0.09'; # TRIAL
+$Specio::Constraint::Enum::VERSION = '0.10';
 use strict;
 use warnings;
 
 use B ();
 use Role::Tiny::With;
 use Specio::Library::Builtins;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 use Storable qw( dclone );
 
 use Specio::Constraint::Role::Interface;
@@ -60,7 +60,7 @@ sub _build_inline_environment {
     return { '%_Specio_Constraint_Enum_enum_values' => \%values };
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -70,18 +70,20 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Constraint::Enum - A class for constraints which require a string matching one of a set of values
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  my $type = Specio::Constraint::Enum->new(...);
-  print $_, "\n" for @{ $type->values() };
+    my $type = Specio::Constraint::Enum->new(...);
+    print $_, "\n" for @{ $type->values() };
 
 =head1 DESCRIPTION
 

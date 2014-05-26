@@ -1,5 +1,5 @@
 package Specio::Registry;
-$Specio::Registry::VERSION = '0.09'; # TRIAL
+$Specio::Registry::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -57,13 +57,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Registry - Implements the per-package type registry
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

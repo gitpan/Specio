@@ -1,5 +1,5 @@
 package Specio::TypeChecks;
-$Specio::TypeChecks::VERSION = '0.09'; # TRIAL
+$Specio::TypeChecks::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -61,13 +61,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::TypeChecks - Type checks used internally for Specio classes (it's not self-bootstrapping (yet?))
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

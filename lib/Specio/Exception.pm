@@ -1,5 +1,5 @@
 package Specio::Exception;
-$Specio::Exception::VERSION = '0.09'; # TRIAL
+$Specio::Exception::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -9,7 +9,7 @@ use overload
 
 use Devel::StackTrace;
 use Scalar::Util qw( blessed );
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 
 {
     my $attrs = {
@@ -59,7 +59,7 @@ sub throw {
     die $self->new(@_);
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -69,13 +69,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Exception - A Throwable::Error subclass for type constraint failures
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

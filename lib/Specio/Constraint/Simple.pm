@@ -1,14 +1,14 @@
 package Specio::Constraint::Simple;
-$Specio::Constraint::Simple::VERSION = '0.09'; # TRIAL
+$Specio::Constraint::Simple::VERSION = '0.10';
 use strict;
 use warnings;
 
 use Role::Tiny::With;
-use Specio::OO qw( clone new _accessorize );
+use Specio::OO;
 
 with 'Specio::Constraint::Role::Interface';
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -18,27 +18,29 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Constraint::Simple - Class for simple (non-parameterized or specialized) types
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  my $str = t('Str');
+    my $str = t('Str');
 
-  print $str->name(); # Str
+    print $str->name(); # Str
 
-  my $parent = $str->parent();
+    my $parent = $str->parent();
 
-  if ( $str->value_is_valid($value) ) { ... }
+    if ( $str->value_is_valid($value) ) { ... }
 
-  $str->validate_or_die($value);
+    $str->validate_or_die($value);
 
-  my $code = $str->inline_coercion_and_check('$_[0]');
+    my $code = $str->inline_coercion_and_check('$_[0]');
 
 =head1 DESCRIPTION
 
@@ -252,6 +254,20 @@ C<eval_closure> subroutine.
 
 The returned code is a single C<do { }> block without a terminating
 semicolon.
+
+=head2 $type->coercion_sub()
+
+This method returns a sub ref that takes a single argument and applied all
+relevant coercions to it. This sub ref will use L<Sub::Quote> if all the
+type's coercions are inlinable.
+
+This method exists primarily for the benefit of L<Moo>.
+
+=head1 OVERLOADING
+
+All constraints overloading subroutine de-referencing for the benefit of
+L<Moo>. The returned subroutine uses L<Sub::Quote> if the type constraint is
+inlinable.
 
 =head1 ROLES
 

@@ -25,11 +25,13 @@ MUTC
 PARAMETERIZABLE
 PayPal
 Rolsky
+SPECIO
 ScalarRef
 Specio
 Throwable
 boolification
 coercions
+de
 distro
 globification
 inlinable

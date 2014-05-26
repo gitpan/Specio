@@ -1,5 +1,5 @@
 package Specio::Constraint::Role::IsaType;
-$Specio::Constraint::Role::IsaType::VERSION = '0.09'; # TRIAL
+$Specio::Constraint::Role::IsaType::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -58,13 +58,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Constraint::Role::IsaType - Provides a common implementation for Specio::Constraint::AnyIsa and Specio::Constraint::ObjectIsa
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

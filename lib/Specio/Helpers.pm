@@ -1,5 +1,5 @@
 package Specio::Helpers;
-$Specio::Helpers::VERSION = '0.09'; # TRIAL
+$Specio::Helpers::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -78,13 +78,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Helpers - Helper subs for the Specio distro
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

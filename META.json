@@ -34,6 +34,7 @@
             "B" : "0",
             "Carp" : "0",
             "Class::Load" : "0",
+            "Class::Method::Modifiers" : "0",
             "Devel::PartialDump" : "0",
             "Devel::StackTrace" : "0",
             "Eval::Closure" : "0",
@@ -46,7 +47,10 @@
             "Role::Tiny::With" : "0",
             "Scalar::Util" : "0",
             "Storable" : "0",
+            "Sub::Quote" : "0",
+            "Test::More" : "0.88",
             "Try::Tiny" : "0",
+            "mro" : "0",
             "overload" : "0",
             "parent" : "0",
             "perl" : "v5.10.0",
@@ -60,8 +64,10 @@
             "File::Find" : "0",
             "File::Temp" : "0",
             "IO::File" : "0",
+            "Moo" : "0",
             "Test::Fatal" : "0",
             "Test::More" : "0.88",
+            "Test::Requires" : "0",
             "lib" : "0",
             "namespace::autoclean" : "0",
             "open" : "0",
@@ -69,7 +75,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "mailto" : "bug-specio@rt.cpan.org",
@@ -82,7 +88,7 @@
          "web" : "http://git.urth.org/Specio.git"
       }
    },
-   "version" : "0.09",
+   "version" : "0.10",
    "x_authority" : "cpan:DROLSKY"
 }
 

@@ -1,9 +1,9 @@
 package Specio::DeclaredAt;
-$Specio::DeclaredAt::VERSION = '0.09'; # TRIAL
+$Specio::DeclaredAt::VERSION = '0.10';
 use strict;
 use warnings;
 
-use Specio::OO qw( new clone _accessorize );
+use Specio::OO;
 
 {
     my $attrs = {
@@ -62,7 +62,7 @@ sub description {
     return $desc;
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -72,19 +72,21 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::DeclaredAt - A class to represent where a type or coercion was declared
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  my $declared = Specio::DeclaredAt->new_from_caller(1);
+    my $declared = Specio::DeclaredAt->new_from_caller(1);
 
-  print $declared->description();
+    print $declared->description();
 
 =head1 DESCRIPTION
 

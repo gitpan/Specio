@@ -1,5 +1,5 @@
 package Specio::Constraint::ObjectIsa;
-$Specio::Constraint::ObjectIsa::VERSION = '0.09'; # TRIAL
+$Specio::Constraint::ObjectIsa::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -7,7 +7,7 @@ use B ();
 use Role::Tiny::With;
 use Scalar::Util ();
 use Specio::Library::Builtins;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 
 use Specio::Constraint::Role::IsaType;
 with 'Specio::Constraint::Role::IsaType';
@@ -33,7 +33,7 @@ with 'Specio::Constraint::Role::IsaType';
     sub _build_inline_generator { $_inline_generator }
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -43,18 +43,20 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Constraint::ObjectIsa - A class for constraints which require an object that inherits from a specific class
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  my $type = Specio::Constraint::ObjectIsa->new(...);
-  print $type->class();
+    my $type = Specio::Constraint::ObjectIsa->new(...);
+    print $type->class();
 
 =head1 DESCRIPTION
 

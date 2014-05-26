@@ -1,10 +1,10 @@
 package Specio::Constraint::Parameterized;
-$Specio::Constraint::Parameterized::VERSION = '0.09'; # TRIAL
+$Specio::Constraint::Parameterized::VERSION = '0.10';
 use strict;
 use warnings;
 
 use Role::Tiny::With;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 use Storable qw( dclone );
 
 use Specio::Constraint::Role::Interface;
@@ -40,7 +40,7 @@ sub type_parameter {
     shift->parameter();
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
@@ -50,22 +50,24 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Constraint::Parameterized - A class which represents parameterized constraints
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  my $arrayref = t('ArrayRef');
+    my $arrayref = t('ArrayRef');
 
-  my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
+    my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
 
-  my $parent = $arrayref_of_int->parent(); # returns ArrayRef
-  my $parameter = $arrayref_of_int->parameter(); # returns Int
+    my $parent = $arrayref_of_int->parent(); # returns ArrayRef
+    my $parameter = $arrayref_of_int->parameter(); # returns Int
 
 =head1 DESCRIPTION
 

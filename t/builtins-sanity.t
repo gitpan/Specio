@@ -1230,6 +1230,11 @@ sub test_constraint {
             $type->value_is_valid($accept),
             "$name accepts $described using ->value_is_valid"
         );
+        is(
+            exception { $type->($accept) },
+            undef,
+            "$name accepts $described using subref overloading"
+        );
         ok(
             $not_inlined->($accept),
             "$name accepts $described using non-inlined constraint"

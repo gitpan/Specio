@@ -61,4 +61,5 @@ t/release-pod-linkcheck.t
 t/release-pod-no404s.t
 t/release-pod-syntax.t
 t/t-clean.t
+t/with-moo.t
 t/with-moose.t

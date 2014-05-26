@@ -1,5 +1,5 @@
 package Specio::Role::Inlinable;
-$Specio::Role::Inlinable::VERSION = '0.09'; # TRIAL
+$Specio::Role::Inlinable::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -81,13 +81,15 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Role::Inlinable - A role for things which can be inlined (type constraints and coercions)
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 DESCRIPTION
 

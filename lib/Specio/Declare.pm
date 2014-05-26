@@ -1,5 +1,5 @@
 package Specio::Declare;
-$Specio::Declare::VERSION = '0.09'; # TRIAL
+$Specio::Declare::VERSION = '0.10';
 use strict;
 use warnings;
 
@@ -28,6 +28,34 @@ our @EXPORT = qw(
 
 sub import {
     my $package = shift;
+
+    # What the heck is this monstrosity?
+    #
+    # Moose version 2.0901 included a first pass at support for Specio. This
+    # was based on Specio c. 0.06 when Specio itself still used
+    # Moose. Unfortunately, recent changes to Specio broke this support and
+    # the Moose core needs updating.
+    #
+    # However, stable versions of Moose have since shipped with a test that
+    # attempts to test itself with Specio 0.07+. This was fine until I wanted
+    # to release a non-TRIAL Specio.
+    #
+    # Once that's out, anyone installing Specio will cause future attempts to
+    # install Moose to fail until Moose includes updated Specio support!
+    # Breaking Moose is not call, thus this mess.
+    #
+    # Note that future versions of Moose will need to rename the relevant test
+    # file in order to get the Specio tests to actually run, since we need to
+    # leave this in here for quite some time. People should be able to install
+    # Specio and older Moose indefinitely.
+    if (   $ENV{HARNESS_ACTIVE}
+        && $0 =~ m{t[\\/]type_constraints[\\/]specio\.t$} ) {
+
+        require Test::More;
+        Test::More::plan( skip_all =>
+                'These tests will not pass with this version of Specio' );
+        exit 0;
+    }
 
     my $caller = caller();
 
@@ -225,76 +253,78 @@ __END__
 
 =pod
 
+=encoding UTF-8
+
 =head1 NAME
 
 Specio::Declare - Specio declaration subroutines
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
-  package MyApp::Type::Library;
+    package MyApp::Type::Library;
 
-  use parent 'Specio::Exporter';
+    use parent 'Specio::Exporter';
 
-  use Specio::Declare;
-  use Specio::Library::Builtins;
+    use Specio::Declare;
+    use Specio::Library::Builtins;
 
-  declare(
-      'Foo',
-      parent => t('Str'),
-      where  => sub { $_[0] =~ /foo/i },
-  );
+    declare(
+        'Foo',
+        parent => t('Str'),
+        where  => sub { $_[0] =~ /foo/i },
+    );
 
-  declare(
-      'ArrayRefOfInt',
-      parent => t( 'ArrayRef', of => t('Int') ),
-  );
+    declare(
+        'ArrayRefOfInt',
+        parent => t( 'ArrayRef', of => t('Int') ),
+    );
 
-  my $even = anon(
-      parent => t('Int'),
-      inline => sub {
-          my $type      = shift;
-          my $value_var = shift;
+    my $even = anon(
+        parent => t('Int'),
+        inline => sub {
+            my $type      = shift;
+            my $value_var = shift;
 
-          return $value_var . ' % 2 == 0';
-      },
-  );
+            return $value_var . ' % 2 == 0';
+        },
+    );
 
-  coerce(
-      t('ArrayRef'),
-      from  => t('Foo'),
-      using => sub { [ $_[0] ] },
-  );
+    coerce(
+        t('ArrayRef'),
+        from  => t('Foo'),
+        using => sub { [ $_[0] ] },
+    );
 
-  coerce(
-      $even,
-      from  => t('Int'),
-      using => sub { $_[0] % 2 ? $_[0] + 1 : $_[0] },
-  );
+    coerce(
+        $even,
+        from  => t('Int'),
+        using => sub { $_[0] % 2 ? $_[0] + 1 : $_[0] },
+    );
 
-  # Specio name is DateTime
-  any_isa_type('DateTime');
+    # Specio name is DateTime
+    any_isa_type('DateTime');
 
-  # Specio name is DateTimeObject
-  object_isa_type( 'DateTimeObject', 'DateTime' );
+    # Specio name is DateTimeObject
+    object_isa_type( 'DateTimeObject', 'DateTime' );
 
-  any_can_type(
-      'Duck',
-      methods => [ 'duck_walk', 'quack' ],
-  );
+    any_can_type(
+        'Duck',
+        methods => [ 'duck_walk', 'quack' ],
+    );
 
-  object_can_type(
-      'DuckObject',
-      methods => [ 'duck_walk', 'quack' ],
-  );
+    object_can_type(
+        'DuckObject',
+        methods => [ 'duck_walk', 'quack' ],
+    );
 
-  enum(
-      'Colors',
-      [qw( blue green red )],
-  );
+    enum(
+        'Colors',
+        [qw( blue green red )],
+    );
 
 =head1 DESCRIPTION
 
