@@ -2,7 +2,7 @@ NAME
     Specio - Type constraints and coercions for Perl
 
 VERSION
-    version 0.10
+    version 0.11
 
 SYNOPSIS
         package MyApp::Type::Library;

@@ -1,5 +1,5 @@
 package Specio::Registry;
-$Specio::Registry::VERSION = '0.10';
+$Specio::Registry::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -65,7 +65,7 @@ Specio::Registry - Implements the per-package type registry
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

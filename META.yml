@@ -54,5 +54,5 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=Specio
   homepage: http://metacpan.org/release/Specio
   repository: git://git.urth.org/Specio.git
-version: '0.10'
+version: '0.11'
 x_authority: cpan:DROLSKY

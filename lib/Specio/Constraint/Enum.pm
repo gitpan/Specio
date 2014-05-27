@@ -1,5 +1,5 @@
 package Specio::Constraint::Enum;
-$Specio::Constraint::Enum::VERSION = '0.10';
+$Specio::Constraint::Enum::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -17,7 +17,8 @@ with 'Specio::Constraint::Role::Interface';
 
     for my $name (qw( parent _inline_generator )) {
         $attrs->{$name}{init_arg} = undef;
-        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
+        $attrs->{$name}{builder}
+            = $name =~ /^_/ ? '_build' . $name : '_build_' . $name;
     }
 
     $attrs->{values} = {
@@ -78,7 +79,7 @@ Specio::Constraint::Enum - A class for constraints which require a string matchi
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 

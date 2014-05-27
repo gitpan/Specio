@@ -1,5 +1,5 @@
 package Specio::Exception;
-$Specio::Exception::VERSION = '0.10';
+$Specio::Exception::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -77,7 +77,7 @@ Specio::Exception - A Throwable::Error subclass for type constraint failures
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

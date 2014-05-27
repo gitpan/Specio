@@ -1,5 +1,5 @@
 package Specio::Constraint::AnyDoes;
-$Specio::Constraint::AnyDoes::VERSION = '0.10';
+$Specio::Constraint::AnyDoes::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -55,7 +55,7 @@ Specio::Constraint::AnyDoes - A class for constraints which require a class name
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 

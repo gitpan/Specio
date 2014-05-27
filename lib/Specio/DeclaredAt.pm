@@ -1,5 +1,5 @@
 package Specio::DeclaredAt;
-$Specio::DeclaredAt::VERSION = '0.10';
+$Specio::DeclaredAt::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -80,7 +80,7 @@ Specio::DeclaredAt - A class to represent where a type or coercion was declared
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 

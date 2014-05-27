@@ -1,5 +1,5 @@
 package Specio::Constraint::Role::DoesType;
-$Specio::Constraint::Role::DoesType::VERSION = '0.10';
+$Specio::Constraint::Role::DoesType::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -14,7 +14,8 @@ with 'Specio::Constraint::Role::Interface';
 
     for my $name (qw( parent _inline_generator )) {
         $attrs->{$name}{init_arg} = undef;
-        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
+        $attrs->{$name}{builder}
+            = $name =~ /^_/ ? '_build' . $name : '_build_' . $name;
     }
 
     $attrs->{role} = {
@@ -65,7 +66,7 @@ Specio::Constraint::Role::DoesType - Provides a common implementation for Specio
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

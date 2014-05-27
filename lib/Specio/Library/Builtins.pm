@@ -1,5 +1,5 @@
 package Specio::Library::Builtins;
-$Specio::Library::Builtins::VERSION = '0.10';
+$Specio::Library::Builtins::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -385,7 +385,7 @@ Specio::Library::Builtins - Implements type constraint objects for Perl's built-
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

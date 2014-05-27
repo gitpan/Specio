@@ -1,5 +1,5 @@
 package Specio::Declare;
-$Specio::Declare::VERSION = '0.10';
+$Specio::Declare::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -42,12 +42,12 @@ sub import {
     #
     # Once that's out, anyone installing Specio will cause future attempts to
     # install Moose to fail until Moose includes updated Specio support!
-    # Breaking Moose is not call, thus this mess.
+    # Breaking Moose is not acceptable, thus this mess.
     #
-    # Note that future versions of Moose will need to rename the relevant test
-    # file in order to get the Specio tests to actually run, since we need to
-    # leave this in here for quite some time. People should be able to install
-    # Specio and older Moose indefinitely.
+    # Note that since Moose 2.1207 this test was renamed and the Specio tests
+    # actually run (and pass). We still need to leave this in here for quite
+    # some time. People should be able to install Specio and then install an
+    # older Moose indefinitely (or at least for a year or two).
     if (   $ENV{HARNESS_ACTIVE}
         && $0 =~ m{t[\\/]type_constraints[\\/]specio\.t$} ) {
 
@@ -261,7 +261,7 @@ Specio::Declare - Specio declaration subroutines
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 

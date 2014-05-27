@@ -1,5 +1,5 @@
 package Specio;
-$Specio::VERSION = '0.10';
+$Specio::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -21,7 +21,7 @@ Specio - Type constraints and coercions for Perl
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 

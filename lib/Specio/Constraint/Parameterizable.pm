@@ -1,5 +1,5 @@
 package Specio::Constraint::Parameterizable;
-$Specio::Constraint::Parameterizable::VERSION = '0.10';
+$Specio::Constraint::Parameterizable::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -106,7 +106,7 @@ Specio::Constraint::Parameterizable - A class which represents parameterizable c
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 

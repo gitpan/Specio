@@ -1,5 +1,5 @@
 package Specio::TypeChecks;
-$Specio::TypeChecks::VERSION = '0.10';
+$Specio::TypeChecks::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -69,7 +69,7 @@ Specio::TypeChecks - Type checks used internally for Specio classes (it's not se
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 DESCRIPTION
 

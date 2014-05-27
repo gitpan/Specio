@@ -1,5 +1,5 @@
 package Specio::Constraint::ObjectDoes;
-$Specio::Constraint::ObjectDoes::VERSION = '0.10';
+$Specio::Constraint::ObjectDoes::VERSION = '0.11';
 use strict;
 use warnings;
 
@@ -53,7 +53,7 @@ Specio::Constraint::ObjectDoes - A class for constraints which require an object
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
